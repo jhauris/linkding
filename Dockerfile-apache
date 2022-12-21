@@ -1,0 +1,4 @@
+FROM httpd
+
+COPY config/httpd.conf /usr/local/apache2/conf/httpd.conf
+COPY config/httpd_vhost.conf /usr/local/apache2/conf/extra/linkding.conf

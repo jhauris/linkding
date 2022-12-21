@@ -11,3 +11,14 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+  
+  apache2:
+    build:
+      context: .
+      dockerfile: Dockerfile-apache
+    depends_on:
+      - linkding
+    profiles:
+      - apache2
+    ports:
+      - 9100:9100
