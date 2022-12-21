@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'background_task',
+    'freeipa_auth',
 ]
 
 MIDDLEWARE = [
@@ -187,6 +188,9 @@ LD_ENABLE_AUTH_PROXY = os.getenv('LD_ENABLE_AUTH_PROXY', False) in (True, 'True'
 LD_AUTH_PROXY_USERNAME_HEADER = os.getenv('LD_AUTH_PROXY_USERNAME_HEADER', 'REMOTE_USER')
 LD_AUTH_PROXY_LOGOUT_URL = os.getenv('LD_AUTH_PROXY_LOGOUT_URL', None)
 
+# FQDN of FreeIPA authentication server. If None, method not used.
+FREEIPA_AUTH_SERVER = os.getenv('LD_FREEIPA_AUTH_SERVER', None)
+
 if LD_ENABLE_AUTH_PROXY:
     # Add middleware that automatically authenticates requests that have a known username
     # in the LD_AUTH_PROXY_USERNAME_HEADER request header
@@ -198,6 +202,21 @@ if LD_ENABLE_AUTH_PROXY:
     # Configure logout URL
     if LD_AUTH_PROXY_LOGOUT_URL:
         LOGOUT_REDIRECT_URL = LD_AUTH_PROXY_LOGOUT_URL
+elif FREEIPA_AUTH_SERVER:
+    AUTHENTICATION_BACKENDS = [
+        'freeipa_auth.backends.FreeIpaRpcAuthBackend',
+    ]
+
+    FREEIPA_AUTH_BACKEND_ENABLED = True
+    # Optional failover server FQDN
+    FREEIPA_AUTH_FAILOVER_SERVER = os.getenv('LD_FREEIPA_AUTH_FAILOVER_SERVER', None)
+    # Path to root certificate, for auth servers using self-signed certs.
+    FREEIPA_AUTH_SSL_VERIFY = os.getenv('LD_FREEIPA_AUTH_SSL_CERT', None)
+    # If set to a list, will be the list of groups added to the user on login.
+    FREEIPA_AUTH_UPDATE_USER_GROUPS = False
+    FREEIPA_AUTH_ALWAYS_UPDATE_USER = True
+    FREEIPA_AUTH_USER_ATTRS_MAP = {"first_name": "givenname", "last_name": "sn", "email": "mail"}
+    FREEIPA_AUTH_SERVER_TIMEOUT = os.getenv('LD_FREEIPA_AUTH_SERVER_TIMEOUT', 5)
 
 # CSRF trusted origins
 trusted_origins = os.getenv('LD_CSRF_TRUSTED_ORIGINS', '')
