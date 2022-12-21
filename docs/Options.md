@@ -94,6 +94,21 @@ For example, for Authelia, which passes the `Remote-User` HTTP header, the `LD_A
 By default, the logout redirects to the login URL, which means the user will be automatically authenticated again.
 Instead, you might want to configure the logout URL of the auth proxy here.
 
+### `LD_FREEIPA_AUTH_SERVER`
+
+Values: `String` | Default = None
+
+Enables support for logging in using accounts from a FreeIPA server.  [FreeIPA](https://www.freeipa.org/page/Main_Page) is an advanced machine and user management system, similar to Active Directory, but for linux.
+
+When a user authenticates using this method a user account will also be created in the linkding database, but a secret random password will be generated for them. This means that the user will not be able to login via Django username/password.
+
+The value for this option must be the FQDN for the IPA authorization server (for example: "auth.example.com"). Several additional options are also available when using this auth methodology:
+- `LD_FREEIPA_AUTH_FAILOVER_SERVER` - The FQDN for the failover server, if any. Defaults to `None`.
+- `LD_FREEIPA_AUTH_SSL_VERIFY` - Path to the SSL certificate of the FreeIPA server if using a self-signed certificate. Defaults to `None`, which works if the server is using a known certificate authority.
+- `LD_FREEIPA_AUTH_SERVER_TIMEOUT` - Integer number of seconds to timeout on trying to authenticate the user.
+
+This functionallity uses the [django-freeip-auth](https://github.com/enervee/django-freeipa-auth) library, and there are addiotional options that can be overriden in custom.py.
+
 ### `LD_CSRF_TRUSTED_ORIGINS`
 
 Values: `String` | Default = None
