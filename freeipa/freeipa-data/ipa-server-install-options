@@ -1,0 +1,4 @@
+--realm=EXAMPLE.TEST
+--ds-password=password
+--admin-password=password
+--no-ntp

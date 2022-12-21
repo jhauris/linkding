@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  freeipa:
+    image: freeipa/freeipa-server:almalinux-9
+    hostname: ipa.example.test
+    volumes:
+      - ./freeipa-data:/data:Z
+
+  linkding:
+    container_name: "${LD_CONTAINER_NAME:-linkding}"
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "${LD_HOST_PORT:-9090}:9090"
+    volumes:
+      - "${LD_HOST_DATA_DIR:-./data}:/etc/linkding/data"
+    environment:
+      - LD_FREEIPA_AUTH_SERVER=ipa.example.test
+    depends_on:
+      - freeipa
+    restart: unless-stopped
