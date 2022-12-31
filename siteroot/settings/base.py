@@ -89,6 +89,30 @@ DATABASES = {
     }
 }
 
+DB_HOST = os.getenv('LD_DB_HOST')
+DB_PORT = os.getenv('LD_DB_PORT', 5432)
+DB_NAME = os.getenv('LD_DB_NAME')
+DB_USER = os.getenv('LD_DB_USER')
+DB_SSL = os.getenv('LD_DB_SSL')
+DB_PASSWORD = os.getenv('LD_DB_PASSWORD')
+if DB_HOST:
+    print(f'Connecting to postgres database {DB_USER}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': DB_HOST,
+            'PORT': DB_PORT,
+        }
+    }
+    if DB_SSL is not None and (DB_SSL == True or DB_SSL.lower() == 'true'):
+        print('Connecting to postgres using SSL')
+        DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
+else:
+    print('Using SQLite database')
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 

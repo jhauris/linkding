@@ -108,3 +108,42 @@ Note that the setting **must** include the correct protocol (`https` or `http`),
 Multiple origins can be specified by separating them with a comma (`,`).
 
 This setting is adopted from the Django framework used by linkding, more information on the setting is available in the [Django documentation](https://docs.djangoproject.com/en/4.0/ref/settings/#std-setting-CSRF_TRUSTED_ORIGINS).
+
+### `LD_DB_HOST`
+
+Values: `String` | Default = None
+
+The host or IP address of a PostgreSQL database to connect to. If this value is not set linkding will use an SQLite database file.
+
+
+### `LD_DB_PORT`
+
+Values: Valid port number | Default = 5432
+
+The port that the PostgreSQL database to connect to.
+
+### `LD_DB_NAME`
+
+Values: `String` | Default = None
+
+The name of the database that will host the linkding data.
+
+
+### `LD_DB_USER`
+
+Values: `String` | Default = None
+
+The PostgreSQL user name for a user who has full permissions to the `LD_DB_NAME` database on `LD_DB_HOST`. This user must have permissions to create and modify tables in order to apply migrations.
+
+
+### `LD_DB_PASSWORD`
+
+Values: `String` | Default = None
+
+Passwword for the database user `LD_DB_USER`.
+
+### `LD_DB_SSL`
+
+Values: `True`, `False` | Default = `False`
+
+If `True` will require an SSL connection for the database connection.
