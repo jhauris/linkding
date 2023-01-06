@@ -191,6 +191,8 @@ LD_AUTH_PROXY_LOGOUT_URL = os.getenv('LD_AUTH_PROXY_LOGOUT_URL', None)
 # FQDN of FreeIPA authentication server. If None, method not used.
 FREEIPA_AUTH_SERVER = os.getenv('LD_FREEIPA_AUTH_SERVER', None)
 
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
+
 if LD_ENABLE_AUTH_PROXY:
     # Add middleware that automatically authenticates requests that have a known username
     # in the LD_AUTH_PROXY_USERNAME_HEADER request header
@@ -198,14 +200,12 @@ if LD_ENABLE_AUTH_PROXY:
     # Configure auth backend that does not require a password credential
     AUTHENTICATION_BACKENDS = [
         'django.contrib.auth.backends.RemoteUserBackend',
-    ]
+    ] + AUTHENTICATION_BACKENDS
     # Configure logout URL
     if LD_AUTH_PROXY_LOGOUT_URL:
         LOGOUT_REDIRECT_URL = LD_AUTH_PROXY_LOGOUT_URL
 elif FREEIPA_AUTH_SERVER:
-    AUTHENTICATION_BACKENDS = [
-        'freeipa_auth.backends.FreeIpaRpcAuthBackend',
-    ]
+    AUTHENTICATION_BACKENDS.append('freeipa_auth.backends.FreeIpaRpcAuthBackend')
 
     FREEIPA_AUTH_BACKEND_ENABLED = True
     # Optional failover server FQDN
