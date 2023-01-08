@@ -9,6 +9,7 @@ Django==4.1
 django-appconf==1.0.5
 django-compressor==4.1
 django-debug-toolbar==3.6.0
+django-freeipa-auth==2.0.3
 django-generate-secret-key==1.0.2
 django-registration==3.3
 django-sass-processor==1.2.1
